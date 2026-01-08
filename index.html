@@ -37,7 +37,19 @@
       text-align: center;
     }
 
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .container {
+      position: relative;
+      z-index: 1;
       max-width: 600px;
       padding: 2rem;
     }
@@ -191,6 +203,7 @@
   </style>
 </head>
 <body>
+  <canvas id="bg-canvas"></canvas>
   <div class="container">
     <img src="oxbox_games_logo.png" alt="Oxbox Games logo">
     <h1 id="title"><span class="ox">OX</span><span class="box">BOX</span><span class="games">GAMES</span></h1>
@@ -510,6 +523,139 @@
     // Rotate every 7.5 seconds
     setInterval(showNextGame, 7500);
     setInterval(showNextExcuse, 7500);
+  </script>
+
+  <script>
+    // Interactive mesh background with mouse light effect
+    (function() {
+      const bgCanvas = document.getElementById('bg-canvas');
+      const bgCtx = bgCanvas.getContext('2d');
+
+      let mouseX = -1000, mouseY = -1000;
+      const lightRadius = 250;
+
+      // Grid settings
+      const spacing = 50;
+      let cols, rows;
+      let points = [];
+
+      function initGrid() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+        cols = Math.ceil(bgCanvas.width / spacing) + 1;
+        rows = Math.ceil(bgCanvas.height / spacing) + 1;
+
+        points = [];
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            points.push({
+              baseX: x * spacing,
+              baseY: y * spacing,
+              x: x * spacing,
+              y: y * spacing,
+              phase: Math.random() * Math.PI * 2
+            });
+          }
+        }
+      }
+
+      initGrid();
+      window.addEventListener('resize', initGrid);
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        mouseX = -1000;
+        mouseY = -1000;
+      });
+
+      function animateBg() {
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+        const time = Date.now() * 0.001;
+
+        // Update point positions with subtle wave
+        points.forEach(p => {
+          p.x = p.baseX + Math.sin(time * 0.5 + p.phase) * 3;
+          p.y = p.baseY + Math.cos(time * 0.4 + p.phase) * 3;
+        });
+
+        // Draw connections
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const i = y * cols + x;
+            const p = points[i];
+
+            // Calculate distance from mouse
+            const dx = p.x - mouseX;
+            const dy = p.y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const intensity = Math.max(0, 1 - dist / lightRadius);
+
+            // Connect to right neighbor
+            if (x < cols - 1) {
+              const pRight = points[i + 1];
+              const dxR = pRight.x - mouseX;
+              const dyR = pRight.y - mouseY;
+              const distR = Math.sqrt(dxR * dxR + dyR * dyR);
+              const intensityR = Math.max(0, 1 - distR / lightRadius);
+              const lineIntensity = Math.max(intensity, intensityR);
+
+              bgCtx.beginPath();
+              bgCtx.moveTo(p.x, p.y);
+              bgCtx.lineTo(pRight.x, pRight.y);
+
+              if (lineIntensity > 0) {
+                bgCtx.strokeStyle = `rgba(210, 120, 50, ${0.03 + lineIntensity * 0.4})`;
+                bgCtx.lineWidth = 0.5 + lineIntensity * 1.5;
+              } else {
+                bgCtx.strokeStyle = 'rgba(80, 60, 40, 0.03)';
+                bgCtx.lineWidth = 0.5;
+              }
+              bgCtx.stroke();
+            }
+
+            // Connect to bottom neighbor
+            if (y < rows - 1) {
+              const pBottom = points[i + cols];
+              const dxB = pBottom.x - mouseX;
+              const dyB = pBottom.y - mouseY;
+              const distB = Math.sqrt(dxB * dxB + dyB * dyB);
+              const intensityB = Math.max(0, 1 - distB / lightRadius);
+              const lineIntensity = Math.max(intensity, intensityB);
+
+              bgCtx.beginPath();
+              bgCtx.moveTo(p.x, p.y);
+              bgCtx.lineTo(pBottom.x, pBottom.y);
+
+              if (lineIntensity > 0) {
+                bgCtx.strokeStyle = `rgba(210, 120, 50, ${0.03 + lineIntensity * 0.4})`;
+                bgCtx.lineWidth = 0.5 + lineIntensity * 1.5;
+              } else {
+                bgCtx.strokeStyle = 'rgba(80, 60, 40, 0.03)';
+                bgCtx.lineWidth = 0.5;
+              }
+              bgCtx.stroke();
+            }
+
+            // Draw node point if illuminated
+            if (intensity > 0.1) {
+              bgCtx.beginPath();
+              bgCtx.arc(p.x, p.y, 1 + intensity * 3, 0, Math.PI * 2);
+              bgCtx.fillStyle = `rgba(255, 165, 0, ${intensity * 0.6})`;
+              bgCtx.fill();
+            }
+          }
+        }
+
+        requestAnimationFrame(animateBg);
+      }
+
+      animateBg();
+    })();
   </script>
 </body>
 </html>
