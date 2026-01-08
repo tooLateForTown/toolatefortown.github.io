@@ -133,6 +133,61 @@
       line-height: 1.6;
       font-size: 1.1rem;
     }
+
+    .games-sections {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .games-section {
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+    }
+
+    .games-section h2 {
+      font-size: 0.9rem;
+      opacity: 0.5;
+      margin-bottom: 0.8rem;
+      font-weight: normal;
+      letter-spacing: 0.05em;
+    }
+
+    .game-quote {
+      min-height: 3.5em;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .game-quote.visible {
+      opacity: 1;
+    }
+
+    .game-quote .game-name {
+      color: #ffa500;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .game-quote .reason, .game-quote .excuse {
+      opacity: 0.7;
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+
+    .game-quote .excuse {
+      color: #88ccff;
+    }
+
+    .made-by .status {
+      color: #666;
+      font-size: 0.85rem;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
@@ -161,6 +216,22 @@
       Focused on tight gameplay, strong systems,
       and player-respecting design.
     </p>
+    <div class="games-sections">
+      <div class="games-section made-by">
+        <h2>Games made by Oxbox Games:</h2>
+        <div class="game-quote" id="game-quote-made">
+          <span class="status">None yet...</span><br>
+          <span class="excuse"></span>
+        </div>
+      </div>
+      <div class="games-section not-made-by">
+        <h2>Games NOT made by Oxbox Games:</h2>
+        <div class="game-quote" id="game-quote-not">
+          <span class="game-name"></span><br>
+          <span class="reason"></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -198,6 +269,264 @@
 
       setTimeout(() => sparkle.remove(), 800);
     }
+
+    // Games NOT made by Oxbox Games
+    const gamesNotMade = [
+      ["Hollow Knight", "Art and music way too fancy for our stick figures"],
+      ["The Last of Us", "Voice actors expect actual paychecks"],
+      ["Red Dead Redemption 2", "Horse physics alone would bankrupt us"],
+      ["GTA V", "Our legal team is just a guy named Steve who took one law class"],
+      ["Elden Ring", "FromSoftware has more employees than we have chairs"],
+      ["Minecraft", "We can't even make cubes look that good"],
+      ["The Witcher 3", "Geralt's hair physics cost more than our entire office"],
+      ["God of War", "Kratos's beard has more polygons than our whole game"],
+      ["Zelda: Breath of the Wild", "We can't afford that much grass"],
+      ["Cyberpunk 2077", "Even with bugs, it's prettier than our best work"],
+      ["Skyrim", "Todd Howard has more re-releases than we have releases"],
+      ["Dark Souls", "Our QA tester rage-quit on level one"],
+      ["Portal", "We failed the physics exam. Twice."],
+      ["Half-Life 2", "Valve can count to 2, we're still learning"],
+      ["Halo", "Master Chief's helmet costs more than our budget"],
+      ["Super Mario Odyssey", "Nintendo's legal team haunts our dreams"],
+      ["DOOM", "Our computers can't even run it, let alone make it"],
+      ["Tetris", "We couldn't figure out how to rotate blocks"],
+      ["Pac-Man", "Yellow circles are surprisingly difficult"],
+      ["Sonic the Hedgehog", "Too fast, our game engine just crashes"],
+      ["Final Fantasy VII", "Seven is a lot of fantasies to keep track of"],
+      ["Metal Gear Solid", "We can't afford cardboard boxes... wait"],
+      ["Resident Evil", "Our zombies look like tired interns"],
+      ["Street Fighter", "We only know how to throw weak punches"],
+      ["Mortal Kombat", "Fatalities require actual animation skills"],
+      ["Assassin's Creed", "Parkour is hard, climbing ladders is our limit"],
+      ["Bioshock", "Would you kindly fund our tiny studio?"],
+      ["Mass Effect", "Our dialogue wheel has one option: 'OK'"],
+      ["Dragon Age", "We can't draw dragons, only angry lizards"],
+      ["Fallout", "Our post-apocalypse looks like a messy bedroom"],
+      ["Borderlands", "We ran out of cel-shading budget on day one"],
+      ["Diablo", "Our demons look like angry potatoes"],
+      ["World of Warcraft", "We can't even organize a team lunch"],
+      ["League of Legends", "Our toxicity budget is way too low"],
+      ["Overwatch", "Our characters would all look suspiciously similar"],
+      ["Fortnite", "Building mechanics require geometry knowledge"],
+      ["PUBG", "100 players? We can barely handle 2"],
+      ["Among Us", "Our impostor is way too obvious"],
+      ["Stardew Valley", "One guy made this masterpiece. We need twelve."],
+      ["Undertale", "Toby Fox has more talent in his dog than our whole team"],
+      ["Cuphead", "Hand-drawn animation? We have MS Paint"],
+      ["Celeste", "We can't climb that many mountains emotionally"],
+      ["Hades", "Greek mythology requires reading actual books"],
+      ["Shovel Knight", "We literally cannot afford a shovel"],
+      ["Dead Cells", "Our cells are very much alive and extremely lazy"],
+      ["Ori and the Blind Forest", "Our forest spirits look like blurry smudges"],
+      ["Limbo", "Our shadows aren't that artistic or meaningful"],
+      ["Inside", "We're still outside trying to get in the industry"],
+      ["Braid", "Time manipulation is beyond our skill tree"],
+      ["Super Meat Boy", "Our meat is tragically undercooked"],
+      ["Spelunky", "We're genuinely afraid of caves"],
+      ["The Binding of Isaac", "Too many tears, not enough tissues"],
+      ["Enter the Gungeon", "We only have one gun emoji to work with"],
+      ["Slay the Spire", "We can't even climb regular stairs"],
+      ["Inscryption", "We don't understand card games or horror"],
+      ["Disco Elysium", "Our dialogue trees are just sad stumps"],
+      ["Divinity: Original Sin 2", "Turn-based combat requires patience we lack"],
+      ["Baldur's Gate 3", "Larian has more voice lines than we have code"],
+      ["Uncharted", "Our treasure hunting only finds bugs"],
+      ["Spider-Man", "Web physics are way too sticky for us"],
+      ["Batman: Arkham Asylum", "We can't afford the Batmobile insurance"],
+      ["Sekiro", "We died just reading the tutorial description"],
+      ["Bloodborne", "Our blood effects are just ketchup splats"],
+      ["Demon's Souls", "Too many souls, not enough programming bodies"],
+      ["Ghost of Tsushima", "Wind effects are a premium feature apparently"],
+      ["Horizon Zero Dawn", "Robot dinosaurs need actual engineering degrees"],
+      ["Death Stranding", "We don't understand it either, honestly"],
+      ["Control", "Our furniture stubbornly stays on the ground"],
+      ["Alan Wake", "We're genuinely afraid of the dark"],
+      ["Titanfall", "Our titans fall down and refuse to get up"],
+      ["Apex Legends", "Battle royale needs more than 3 players and a dream"],
+      ["Destiny", "Our loot drops are just mismatched socks"],
+      ["The Division", "We can't divide, only subtract from our budget"],
+      ["Watch Dogs", "Hacking requires computers newer than 2005"],
+      ["Far Cry", "Our cry is more of a gentle whimper"],
+      ["Just Cause", "Our explosions are basically sparklers"],
+      ["Saints Row", "Our saints are unfortunately too well-behaved"],
+      ["Sleeping Dogs", "Our dogs are always wide awake and barking"],
+      ["Yakuza", "We absolutely cannot afford karaoke licenses"],
+      ["Persona 5", "Style requires fashion sense we don't possess"],
+      ["Fire Emblem", "Our emblems keep burning out unexpectedly"],
+      ["Animal Crossing", "Tom Nook has better business sense than us"],
+      ["Pokemon", "Catching 'em all requires catching at least one first"],
+      ["Monster Hunter", "We are the monsters being hunted by deadlines"],
+      ["Devil May Cry", "Our combos are just desperate button mashing"],
+      ["Bayonetta", "Way too stylish, we only own cargo shorts"],
+      ["NieR: Automata", "Existential crisis not included in our budget"],
+      ["Kingdom Hearts", "Disney lawyers give us actual nightmares"],
+      ["Chrono Trigger", "Time travel keeps breaking our version control"],
+      ["EarthBound", "Our humor isn't nearly quirky enough"],
+      ["Secret of Mana", "Our mana pool is just energy drinks"],
+      ["Castlevania", "Whips are surprisingly expensive to animate"],
+      ["Mega Man", "Our man is just regular-sized and tired"],
+      ["Contra", "Up up down down is literally our entire skill set"],
+      ["Double Dragon", "One dragon is already too many for us"],
+      ["Ghosts 'n Goblins", "Our ghosts are just bedsheets with holes"],
+      ["Battletoads", "Our toads can't even hop properly"],
+      ["Adventure (Atari)", "Square protagonist is actually our skill level"],
+      ["Pong", "Okay... we might actually be able to make this one"],
+      ["Space Invaders", "Our invaders politely knock first"]
+    ];
+
+    // Excuses for why we haven't published a game yet
+    const excuses = [
+      "Stuck in prototype hell since 2024",
+      "Too busy watching game dev tutorials",
+      "Our lead developer discovered coffee breaks",
+      "The code compiled once and we're afraid to touch it",
+      "Waiting for the perfect game idea (any day now)",
+      "Our artist is still learning to draw circles",
+      "Scope creep ate our first seven projects",
+      "We keep restarting in new game engines",
+      "Someone said 'what if we add multiplayer' and everything collapsed",
+      "Our project manager is also our only developer",
+      "The backlog has become sentient and refuses to shrink",
+      "We accidentally deleted the main branch. Twice.",
+      "Currently debugging a bug that creates more bugs",
+      "Our Trello board has achieved critical mass",
+      "The intern shipped to production and we're still recovering",
+      "Refactoring the refactored refactor",
+      "Our game design document is longer than War and Peace",
+      "Waiting for motivation to compile",
+      "The build server is held together with hope and duct tape",
+      "We pivoted so many times we're back at the original idea",
+      "Our sprint planning meeting is in its third week",
+      "Someone enabled dark mode and we can't find the code anymore",
+      "The physics engine gained consciousness and quit",
+      "Our vertical slice is more of a horizontal nap",
+      "We keep adding 'one more feature' before launch",
+      "The game is done but we can't agree on the title",
+      "Our QA team (also us) keeps finding 'character-building' bugs",
+      "We're waiting for the right alignment of stars and compilers",
+      "Too many cooks, not enough actual cooking",
+      "Our minimum viable product has maximum viable delays",
+      "Someone mentioned 'blockchain integration' as a joke and management took notes",
+      "The tutorial level has been in development for 18 months",
+      "We scheduled the launch and then invented new procrastination methods",
+      "Our roadmap needs its own roadmap",
+      "Still recovering from the Great Merge Conflict of 2024",
+      "The game works perfectly, except for the game part",
+      "Our playtester (the developer's mom) gave harsh feedback",
+      "We keep stopping to admire our own placeholder art",
+      "The loading screen is done, everything else is TBD",
+      "Our agile methodology became suspiciously waterfall",
+      "We discovered Steam has other games and got distracted",
+      "The main menu alone took six months",
+      "Our deadline is a moving target (it moves away from us)",
+      "We're 90% done, which means we're 50% done",
+      "The release date is 'when it's ready' (never)",
+      "Our code review process requires actual code",
+      "Someone installed a new font and the whole UI broke",
+      "We're still arguing about tabs vs spaces",
+      "The game loop has become a game circle, then a game dot",
+      "Our version control has commitment issues",
+      "We keep getting sidetracked by cool shader effects",
+      "The AI pathfinding found a path straight to the exit",
+      "Our crunch time crunched us instead",
+      "We're perfectionists with imperfect time management",
+      "The tutorial is longer than the actual game",
+      "We added a day/night cycle and lost three months",
+      "Our marketing budget is $0 and falling",
+      "Someone asked 'but what about accessibility' and we spiraled (rightfully) for months",
+      "The only bug-free code is the code we haven't written",
+      "Our game keeps turning into a different game",
+      "We decided to 'polish' and vanished into the void",
+      "The scope of 'small indie game' grew to AAA somehow",
+      "Our stand-up meetings became sit-down-and-cry meetings",
+      "We're feature complete except for the features",
+      "The game is fun, we just need to add the game",
+      "Our alpha has been alpha for so long it's basically ancient Greek",
+      "We keep rewriting the engine from scratch 'for fun'",
+      "Steam page is ready, game is optional apparently",
+      "The tutorial tooltip explaining tutorials needs a tutorial",
+      "We discovered imposter syndrome isn't just an Among Us thing",
+      "Our development cycle is more of a development dot",
+      "The 'final' build folder has 47 versions",
+      "We spent six months on a feature we cut",
+      "Someone said 'soft launch' and we heard 'soft couch'",
+      "Our technical debt has its own credit rating",
+      "The game is ready but our self-doubt isn't",
+      "We keep watching GDC talks instead of making games",
+      "Our prototype is prototyping more prototypes",
+      "We're in a committed relationship with procrastination",
+      "The settings menu has more content than the game",
+      "We added mod support before we had a game to mod",
+      "Our game idea evolved into an existential crisis",
+      "Still optimizing code that runs once at startup",
+      "We're waiting for a sign (the exit sign is right there)",
+      "The pre-pre-pre-alpha is coming along nicely",
+      "Our save system saves everything except our sanity",
+      "We're 'almost done' (we've been almost done for two years)",
+      "The game crashes less than our motivation",
+      "Our dev blog has more content than our game",
+      "We keep saying 'after this refactor' like it means something",
+      "Someone discovered procedural generation and we lost a year",
+      "The only consistent thing is our inconsistency",
+      "Our burnout rate exceeds our build rate",
+      "We pivoted to 'thoughtful development' (that's code for slow)",
+      "Still debugging the debugger",
+      "Our game has great vibes, shame about the gameplay",
+      "We're one 'aha moment' away from starting over again",
+      "The README is comprehensive, the game is not",
+      "We got distracted making tools to make the game faster",
+      "Coming Soon™ (trademark pending, like the game)"
+    ];
+
+    // Shuffle array
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    // NOT made by section
+    const shuffledGames = shuffleArray(gamesNotMade);
+    let currentGameIndex = 0;
+    const quoteNotElement = document.getElementById('game-quote-not');
+    const gameNameEl = quoteNotElement.querySelector('.game-name');
+    const reasonEl = quoteNotElement.querySelector('.reason');
+
+    function showNextGame() {
+      quoteNotElement.classList.remove('visible');
+      setTimeout(() => {
+        const [game, reason] = shuffledGames[currentGameIndex];
+        gameNameEl.textContent = game;
+        reasonEl.textContent = reason;
+        quoteNotElement.classList.add('visible');
+        currentGameIndex = (currentGameIndex + 1) % shuffledGames.length;
+      }, 500);
+    }
+
+    // Made by section (excuses)
+    const shuffledExcuses = shuffleArray(excuses);
+    let currentExcuseIndex = 0;
+    const quoteMadeElement = document.getElementById('game-quote-made');
+    const excuseEl = quoteMadeElement.querySelector('.excuse');
+
+    function showNextExcuse() {
+      quoteMadeElement.classList.remove('visible');
+      setTimeout(() => {
+        excuseEl.textContent = shuffledExcuses[currentExcuseIndex];
+        quoteMadeElement.classList.add('visible');
+        currentExcuseIndex = (currentExcuseIndex + 1) % shuffledExcuses.length;
+      }, 500);
+    }
+
+    // Show first items immediately
+    showNextGame();
+    showNextExcuse();
+    // Rotate every 7.5 seconds
+    setInterval(showNextGame, 7500);
+    setInterval(showNextExcuse, 7500);
   </script>
 
   <script>
@@ -516,25 +845,24 @@
       bulls.push(bull);
     }
 
-    // Create floating boxes
+    // Create floating boxes in circular orbit around logo
     const boxes = [];
     const numBoxes = 8;
+    const orbitRadius = 14;
 
     for (let i = 0; i < numBoxes; i++) {
       const box = createBox();
+      const angle = (i / numBoxes) * Math.PI * 2;
       box.userData = {
         flaps: box.userData.flaps,
         floatOffset: Math.random() * Math.PI * 2,
-        floatSpeed: 0.5 + Math.random() * 0.5,
-        rotSpeed: 0.2 + Math.random() * 0.3,
+        floatSpeed: 0.5 + Math.random() * 0.3,
         openPhase: Math.random() * Math.PI * 2,
         openSpeed: 0.3 + Math.random() * 0.2,
-        x: (Math.random() - 0.5) * 30,
-        y: (Math.random() - 0.5) * 20,
-        driftX: (Math.random() - 0.5) * 0.01,
-        driftY: (Math.random() - 0.5) * 0.01
+        orbitAngle: angle,
+        orbitSpeed: 0.15 + Math.random() * 0.05,
+        orbitRadius: orbitRadius + (Math.random() - 0.5) * 2
       };
-      box.position.set(box.userData.x, box.userData.y, -5);
       scene.add(box);
       boxes.push(box);
     }
@@ -651,28 +979,28 @@
         }
       });
 
-      // Animate boxes
+      // Animate boxes - orbit around logo center
+      // Logo is centered on screen, slightly above middle
+      const orbitCenterY = 2;
+
       boxes.forEach(box => {
         const ud = box.userData;
 
-        // Float and drift
-        ud.x += ud.driftX;
-        ud.y += ud.driftY;
+        // Update orbit angle
+        ud.orbitAngle += ud.orbitSpeed * 0.01;
 
-        // Wrap around screen
-        const halfW = width / 2;
-        const halfH = height / 2;
-        if (ud.x > halfW) ud.x = -halfW;
-        if (ud.x < -halfW) ud.x = halfW;
-        if (ud.y > halfH) ud.y = -halfH;
-        if (ud.y < -halfH) ud.y = halfH;
+        // Calculate position on circular orbit
+        box.position.x = Math.cos(ud.orbitAngle) * ud.orbitRadius;
+        box.position.y = orbitCenterY + Math.sin(ud.orbitAngle) * ud.orbitRadius * 0.5; // Elliptical, flatter
+        box.position.z = Math.sin(ud.orbitAngle) * 3 - 5; // Depth variation
 
-        box.position.x = ud.x;
-        box.position.y = ud.y + Math.sin(time * ud.floatSpeed + ud.floatOffset) * 0.5;
+        // Add gentle floating bob
+        box.position.y += Math.sin(time * ud.floatSpeed + ud.floatOffset) * 0.3;
 
-        // Rotate slowly
-        box.rotation.y += ud.rotSpeed * 0.01;
-        box.rotation.x = Math.sin(time * 0.3 + ud.floatOffset) * 0.1;
+        // Rotate box to face outward from center + spin
+        box.rotation.y = -ud.orbitAngle + Math.PI + time * 0.5;
+        box.rotation.x = Math.sin(time * 0.5 + ud.floatOffset) * 0.15;
+        box.rotation.z = Math.cos(time * 0.3 + ud.floatOffset) * 0.1;
 
         // Animate flaps open/closed
         const openAmount = (Math.sin(time * ud.openSpeed + ud.openPhase) + 1) / 2; // 0 to 1

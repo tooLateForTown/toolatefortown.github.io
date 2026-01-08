@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(magick convert:*)",
+      "Bash(python:*)",
+      "Bash(magick:*)",
+      "Bash(cmd /c:*)",
+      "Bash(powershell -Command \"magick identify ''E:\\\\code\\\\toolatefortown.github.io\\\\oxbox_games_logo.png''\")",
+      "Bash(cmd.exe /c \"py E:\\\\code\\\\toolatefortown.github.io\\\\trim_logo.py\")",
+      "Bash(cmd.exe /c \"py --version\")",
+      "Bash(cat:*)",
+      "Bash(pip install:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
