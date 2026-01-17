@@ -192,6 +192,101 @@
       color: #666;
       font-size: 0.85rem;
     }
+
+    .prototypes-section {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .prototypes-section h2 {
+      font-size: 1rem;
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+      font-weight: normal;
+      letter-spacing: 0.05em;
+    }
+
+    .prototypes-warning {
+      font-size: 0.8rem;
+      color: #ff9900;
+      opacity: 0.8;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .prototypes-warning::before,
+    .prototypes-warning::after {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ff9900, transparent);
+    }
+
+    .prototype-cards {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .prototype-card {
+      background: rgba(255, 165, 0, 0.05);
+      border: 1px solid rgba(255, 165, 0, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      width: 200px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prototype-card::before {
+      content: 'PROTOTYPE';
+      position: absolute;
+      top: 8px;
+      right: -25px;
+      background: #ff6600;
+      color: #000;
+      font-size: 0.55rem;
+      font-weight: bold;
+      padding: 2px 30px;
+      transform: rotate(45deg);
+      letter-spacing: 0.05em;
+    }
+
+    .prototype-card:hover {
+      background: rgba(255, 165, 0, 0.15);
+      border-color: rgba(255, 165, 0, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(255, 165, 0, 0.2);
+    }
+
+    .prototype-card img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin: 0 0 0.8rem 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .prototype-card .game-title {
+      color: #ffa500;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .prototype-card .game-platform {
+      font-size: 0.75rem;
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
@@ -218,6 +313,17 @@
           <span class="game-name"></span><br>
           <span class="reason"></span>
         </div>
+      </div>
+    </div>
+    <div class="prototypes-section">
+      <h2>Playable Prototypes</h2>
+      <div class="prototypes-warning">Under Construction</div>
+      <div class="prototype-cards">
+        <a href="https://play.unity.com/en/games/9493d5e7-6f2c-4998-9594-0fa09565b4e7/smf-pac-man" target="_blank" rel="noopener noreferrer" class="prototype-card">
+          <img src="https://play.unity.com/api/thumbnail/games/9493d5e7-6f2c-4998-9594-0fa09565b4e7" alt="SMF PacMan preview" onerror="this.style.display='none'">
+          <div class="game-title">SMF PacMan</div>
+          <div class="game-platform">Unity Play</div>
+        </a>
       </div>
     </div>
   </div>
